@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroNova — Grow Smarter. Grow Greener.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================
+           CSS Custom Properties
+        ======================================== */
+        :root {
+            --bg:           #0A1F3C;
+            --bg-mid:       #0D2649;
+            --bg-light:     #102C52;
+            --teal:         #00C2A8;
+            --teal-dark:    #009980;
+            --green:        #3DDC84;
+            --green-dark:   #2ab86a;
+            --white:        #E8F4F1;
+            --muted:        #7BA7BC;
+            --dim:          rgba(123,167,188,0.35);
+
+            --font-display: 'Orbitron', sans-serif;
+            --font-body:    'Nunito', sans-serif;
+
+            --glow-teal:  0 0 24px rgba(0,194,168,0.45);
+            --glow-green: 0 0 24px rgba(61,220,132,0.45);
+            --ease:       all 0.3s cubic-bezier(.4,0,.2,1);
+        }
+
+        /* ========================================
+           Reset & Base
+        ======================================== */
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========================================
+           Navigation
+        ======================================== */
+        nav {
+            position: fixed;
+            inset: 0 0 auto 0;
+            z-index: 200;
+            padding: 1.1rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(10,31,60,0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(0,194,168,0.12);
+            transition: background 0.4s ease;
+        }
+        nav.scrolled { background: rgba(5,14,28,0.96); }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: var(--teal);
+            text-decoration: none;
+        }
+        .nav-logo em { color: var(--green); font-style: normal; }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: .4px;
+            transition: color 0.25s;
+        }
+        .nav-links a:hover { color: var(--teal); }
+
+        .btn-nav {
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--teal);
+            background: transparent;
+            border: 1.5px solid var(--teal);
+            padding: .5rem 1.3rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--ease);
+        }
+        .btn-nav:hover {
+            background: var(--teal);
+            color: var(--bg);
+            box-shadow: var(--glow-teal);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--teal);
+            border-radius: 2px;
+            transition: var(--ease);
+        }
+
+        /* ========================================
+           Hero
+        ======================================== */
+        #hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 7rem 5% 4rem;
+            overflow: hidden;
+        }
+
+        #particles-canvas {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Radial spotlight behind content */
+        #hero::after {
+            content: '';
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            width: 520px;
+            height: 520px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,194,168,0.07) 0%, transparent 68%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            font-family: var(--font-display);
+            font-size: 0.62rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--teal);
+            border: 1px solid rgba(0,194,168,0.28);
+            padding: .38rem 1rem;
+            border-radius: 2px;
+            margin-bottom: 1.6rem;
+        }
+        .hero-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.4rem, 4.8vw, 4rem);
+            font-weight: 900;
+            line-height: 1.08;
+            margin-bottom: 1.6rem;
+        }
+        .hero-title .t1 { display: block; color: var(--white); }
+        .hero-title .t2 {
+            display: block;
+            background: linear-gradient(130deg, var(--teal) 30%, var(--green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.08rem;
+            color: var(--muted);
+            line-height: 1.75;
+            max-width: 460px;
+            margin-bottom: 2.6rem;
+            font-weight: 300;
+        }
+
+        .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        .btn-primary {
+            display: inline-block;
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--bg);
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            padding: .9rem 2.1rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: var(--ease);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 32px rgba(0,194,168,0.4);
+        }
+
+        .btn-ghost {
+            display: inline-block;
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--white);
+            background: transparent;
+            border: 1.5px solid rgba(255,255,255,0.18);
+            padding: .9rem 2.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--ease);
+        }
+        .btn-ghost:hover {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        /* ---- Hero Visual / SVG ---- */
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .orb-wrap {
+            position: relative;
+            width: 420px;
+            height: 420px;
+        }
+
+        .orb-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,194,168,0.13) 0%, rgba(61,220,132,0.04) 50%, transparent 72%);
+            animation: pulseOrb 4s ease-in-out infinite;
+        }
+        .orb-ring-outer {
+            position: absolute;
+            inset: -18px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,194,168,0.06);
+            animation: spinRing 30s linear infinite;
+        }
+        @keyframes pulseOrb { 0%,100%{transform:scale(1);opacity:.8} 50%{transform:scale(1.08);opacity:1} }
+        @keyframes spinRing { to { transform: rotate(360deg); } }
+
+        .hero-svg-art {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            animation: floatArt 7s ease-in-out infinite;
+        }
+        @keyframes floatArt {
+            0%,100%{ transform: translateY(0) rotate(0deg); }
+            50%{ transform: translateY(-14px) rotate(1.5deg); }
+        }
+
+        /* Scroll hint */
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .4rem;
+            opacity: .35;
+            pointer-events: none;
+        }
+        .scroll-hint span {
+            font-family: var(--font-display);
+            font-size: .52rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--teal);
+        }
+
+        /* ========================================
+           Shared Section Styles
+        ======================================== */
+        section { padding: 6.5rem 5%; }
+
+        .sec-head {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .sec-label {
+            display: inline-block;
+            font-family: var(--font-display);
+            font-size: .6rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 1rem;
+        }
+        .sec-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 3vw, 2.7rem);
+            font-weight: 700;
+            line-height: 1.18;
+            color: var(--white);
+        }
+        .sec-title em { font-style: normal; color: var(--teal); }
+        .sec-sub {
+            color: var(--muted);
+            font-size: .98rem;
+            line-height: 1.75;
+            max-width: 480px;
+            margin: 1rem auto 0;
+        }
+
+        /* ========================================
+           Fade-in Animations
+        ======================================== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(38px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+        .fade-up.vis { opacity: 1; transform: translateY(0); }
+
+        .stagger > * {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        .stagger.vis > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay:0s; }
+        .stagger.vis > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:.14s; }
+        .stagger.vis > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay:.28s; }
+        .stagger.vis > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay:.42s; }
+
+        /* ========================================
+           Features
+        ======================================== */
+        #features { background: linear-gradient(180deg, var(--bg) 0%, var(--bg-mid) 100%); }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 1.8rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .f-card {
+            position: relative;
+            background: rgba(16,44,82,0.55);
+            border: 1px solid rgba(0,194,168,0.14);
+            border-radius: 14px;
+            padding: 2.4rem;
+            overflow: hidden;
+            transition: var(--ease);
+            cursor: default;
+        }
+        .f-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--teal), transparent);
+            opacity: 0;
+            transition: opacity .35s ease;
+        }
+        .f-card::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; right: -60px;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,194,168,0.06), transparent 70%);
+            pointer-events: none;
+        }
+        .f-card:hover {
+            border-color: rgba(0,194,168,0.38);
+            transform: translateY(-7px);
+            box-shadow: 0 22px 55px rgba(0,0,0,0.3), 0 0 30px rgba(0,194,168,0.08);
+        }
+        .f-card:hover::before { opacity: 1; }
+
+        .f-icon {
+            width: 54px; height: 54px;
+            background: rgba(0,194,168,0.09);
+            border: 1px solid rgba(0,194,168,0.25);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            transition: var(--ease);
+        }
+        .f-card:hover .f-icon {
+            background: rgba(0,194,168,0.18);
+            box-shadow: var(--glow-teal);
+        }
+        .f-icon svg { width: 26px; height: 26px; }
+
+        .f-card h3 {
+            font-family: var(--font-display);
+            font-size: .95rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: .9rem;
+            letter-spacing: .4px;
+        }
+        .f-card p {
+            color: var(--muted);
+            line-height: 1.75;
+            font-size: .92rem;
+        }
+        .f-chip {
+            display: inline-block;
+            margin-top: 1.5rem;
+            font-family: var(--font-display);
+            font-size: .58rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ========================================
+           How It Works
+        ======================================== */
+        #how {
+            background: var(--bg-mid);
+            position: relative;
+            overflow: hidden;
+        }
+        #how::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            width: 700px; height: 700px;
+            background: radial-gradient(circle, rgba(61,220,132,0.035) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .steps-wrap {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr 80px 1fr;
+            align-items: start;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .step {
+            text-align: center;
+            padding: 0 1.2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        .step.vis { opacity: 1; transform: translateY(0); }
+
+        .step-num {
+            font-family: var(--font-display);
+            font-size: .58rem;
+            letter-spacing: 3px;
+            color: var(--teal);
+            text-transform: uppercase;
+            margin-bottom: 1.1rem;
+        }
+        .step-icon {
+            width: 88px; height: 88px;
+            margin: 0 auto 1.4rem;
+            background: rgba(0,194,168,0.07);
+            border: 1.5px solid rgba(0,194,168,0.28);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .step-icon::after {
+            content: '';
+            position: absolute;
+            inset: -7px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,194,168,0.09);
+        }
+        .step-icon svg { width: 38px; height: 38px; }
+        .step h3 {
+            font-family: var(--font-display);
+            font-size: .95rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: .7rem;
+        }
+        .step p { color: var(--muted); font-size: .9rem; line-height: 1.65; }
+
+        .step-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 3.2rem;
+            color: rgba(0,194,168,0.35);
+        }
+        .step-arrow svg { width: 46px; }
+
+        /* ========================================
+           Stats
+        ======================================== */
+        #stats {
+            padding: 4.5rem 5%;
+            background: linear-gradient(135deg, var(--bg-light) 0%, rgba(0,194,168,0.04) 50%, var(--bg-light) 100%);
+            border-top: 1px solid rgba(0,194,168,0.1);
+            border-bottom: 1px solid rgba(0,194,168,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 1rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-right: 1px solid rgba(0,194,168,0.08);
+        }
+        .stat:last-child { border-right: none; }
+
+        .stat-val {
+            display: block;
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 3.5vw, 3.4rem);
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--teal), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: .5rem;
+        }
+        .stat-lbl {
+            color: var(--muted);
+            font-size: .88rem;
+            font-weight: 500;
+        }
+
+        /* ========================================
+           CTA
+        ======================================== */
+        #cta {
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            background: var(--bg);
+        }
+        #cta::before {
+            content: '';
+            position: absolute;
+            top: -80px; left: 50%;
+            transform: translateX(-50%);
+            width: 900px; height: 600px;
+            background: radial-gradient(ellipse, rgba(0,194,168,0.07) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .cta-box {
+            position: relative;
+            z-index: 1;
+            max-width: 660px;
+            margin: 0 auto;
+        }
+        .cta-box h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.9rem, 3.8vw, 3.1rem);
+            font-weight: 900;
+            line-height: 1.18;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+        .cta-box h2 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--teal), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .cta-box p {
+            color: var(--muted);
+            font-size: 1.02rem;
+            line-height: 1.75;
+            margin-bottom: 2.5rem;
+        }
+
+        .email-wrap {
+            display: flex;
+            max-width: 490px;
+            margin: 0 auto;
+            border: 1.5px solid rgba(0,194,168,0.28);
+            border-radius: 6px;
+            overflow: hidden;
+            background: rgba(10,31,60,0.55);
+            transition: border-color .3s, box-shadow .3s;
+        }
+        .email-wrap:focus-within {
+            border-color: var(--teal);
+            box-shadow: 0 0 28px rgba(0,194,168,0.18);
+        }
+        .email-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: .95rem 1.2rem;
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: .95rem;
+            outline: none;
+        }
+        .email-input::placeholder { color: var(--dim); }
+
+        .email-btn {
+            background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+            color: var(--bg);
+            border: none;
+            padding: .95rem 1.8rem;
+            font-family: var(--font-display);
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--ease);
+            white-space: nowrap;
+        }
+        .email-btn:hover { background: linear-gradient(135deg, var(--green), var(--teal)); }
+
+        .cta-note {
+            margin-top: 1rem;
+            font-size: .78rem;
+            color: var(--dim);
+        }
+
+        /* ========================================
+           Footer
+        ======================================== */
+        footer {
+            background: rgba(4,13,28,0.92);
+            border-top: 1px solid rgba(0,194,168,0.1);
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand-name {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: var(--teal);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 1rem;
+        }
+        .footer-brand-name em { color: var(--green); font-style: normal; }
+        .footer-brand p {
+            color: var(--muted);
+            font-size: .88rem;
+            line-height: 1.75;
+            max-width: 255px;
+        }
+
+        .socials {
+            display: flex;
+            gap: .7rem;
+            margin-top: 1.5rem;
+        }
+        .soc {
+            width: 36px; height: 36px;
+            border: 1px solid rgba(0,194,168,0.18);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            text-decoration: none;
+            transition: var(--ease);
+        }
+        .soc:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+            box-shadow: var(--glow-teal);
+        }
+        .soc svg { width: 15px; height: 15px; }
+
+        .footer-col h4 {
+            font-family: var(--font-display);
+            font-size: .6rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 1.2rem;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: .65rem; }
+        .footer-col a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: .88rem;
+            transition: color .2s;
+        }
+        .footer-col a:hover { color: var(--white); }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0,194,168,0.07);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .footer-bottom p {
+            color: var(--dim);
+            font-size: .78rem;
+        }
+        .footer-legal {
+            display: flex;
+            gap: 2rem;
+        }
+        .footer-legal a {
+            color: var(--dim);
+            text-decoration: none;
+            font-size: .78rem;
+            transition: color .2s;
+        }
+        .footer-legal a:hover { color: var(--teal); }
+
+        /* ========================================
+           Responsive
+        ======================================== */
+        @media (max-width: 1024px) {
+            .features-grid { grid-template-columns: repeat(2,1fr); }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .steps-wrap { grid-template-columns: 1fr; max-width: 380px; }
+            .step-arrow { display: none; }
+            .step { padding: 1.6rem 0; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-inner { grid-template-columns: 1fr; text-align: center; }
+            .hero-sub { margin: 0 auto 2.6rem; }
+            .hero-actions { justify-content: center; }
+            .hero-visual { margin-top: 2rem; }
+            .orb-wrap { width: 280px; height: 280px; }
+            nav .nav-links, nav .btn-nav { display: none; }
+            .hamburger { display: flex; }
+            .stats-grid { grid-template-columns: repeat(2,1fr); }
+            .stat { border-right: none; border-bottom: 1px solid rgba(0,194,168,0.08); }
+            .stat:nth-child(3), .stat:last-child { border-bottom: none; }
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            section { padding: 4.5rem 5%; }
+            .features-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .email-wrap { flex-direction: column; }
+            .email-btn { padding: .9rem; border-radius: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==============================
+     Navigation
+============================== -->
+<nav id="navbar">
+    <a href="#" class="nav-logo">HYDRO<em>NOVA</em></a>
+    <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#stats">Results</a></li>
+        <li><a href="#cta">Early Access</a></li>
+    </ul>
+    <button class="btn-nav">Get Started</button>
+    <div class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- ==============================
+     Hero
+============================== -->
+<section id="hero">
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="hero-inner">
+        <!-- Text -->
+        <div class="hero-text">
+            <div class="hero-badge">Next-Gen Hydroponics</div>
+            <h1 class="hero-title">
+                <span class="t1">Grow Smarter.</span>
+                <span class="t2">Grow Greener.</span>
+            </h1>
+            <p class="hero-sub">
+                Precision soilless farming powered by AI and biomimetic engineering.
+                Feed the planet without ever depleting it.
+            </p>
+            <div class="hero-actions">
+                <a href="#features" class="btn-primary">Explore Systems</a>
+                <a href="#how" class="btn-ghost">See How It Works</a>
+            </div>
+        </div>
+
+        <!-- SVG Art -->
+        <div class="hero-visual">
+            <div class="orb-wrap">
+                <div class="orb-ring"></div>
+                <div class="orb-ring-outer"></div>
+
+                <svg class="hero-svg-art" viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer rings -->
+                    <circle cx="210" cy="210" r="192" stroke="rgba(0,194,168,0.12)" stroke-width="1" stroke-dasharray="6 4"/>
+                    <circle cx="210" cy="210" r="158" stroke="rgba(0,194,168,0.08)" stroke-width="1"/>
+                    <circle cx="210" cy="210" r="122" stroke="rgba(61,220,132,0.08)" stroke-width="1" stroke-dasharray="3 7"/>
+
+                    <!-- Circuit arms -->
+                    <g stroke="rgba(0,194,168,0.35)" stroke-width="1.4" stroke-linecap="round">
+                        <line x1="36" y1="210" x2="118" y2="210"/>
+                        <line x1="302" y1="210" x2="384" y2="210"/>
+                        <line x1="210" y1="36" x2="210" y2="118"/>
+                        <line x1="210" y1="302" x2="210" y2="384"/>
+                        <line x1="66"  y1="66"  x2="130" y2="130"/>
+                        <line x1="354" y1="66"  x2="290" y2="130"/>
+                        <line x1="66"  y1="354" x2="130" y2="290"/>
+                        <line x1="354" y1="354" x2="290" y2="290"/>
+                    </g>
+
+                    <!-- Circuit pads (square connectors) -->
+                    <g fill="none" stroke="rgba(0,194,168,0.5)" stroke-width="1">
+                        <rect x="112" y="206" width="8" height="8" rx="1"/>
+                        <rect x="300" y="206" width="8" height="8" rx="1"/>
+                        <rect x="206" y="112" width="8" height="8" rx="1"/>
+                        <rect x="206" y="300" width="8" height="8" rx="1"/>
+                        <rect x="124" y="124" width="7" height="7" rx="1"/>
+                        <rect x="289" y="124" width="7" height="7" rx="1"/>
+                        <rect x="124" y="289" width="7" height="7" rx="1"/>
+                        <rect x="289" y="289" width="7" height="7" rx="1"/>
+                    </g>
+
+                    <!-- Stem -->
+                    <path d="M210 300 L210 175" stroke="rgba(61,220,132,0.75)" stroke-width="2" stroke-linecap="round"/>
+
+                    <!-- Leaf left (large) -->
+                    <path d="M210 248 C172 228 144 205 158 172 C170 143 200 165 210 200"
+                          fill="rgba(61,220,132,0.2)" stroke="rgba(61,220,132,0.65)" stroke-width="1.5"/>
+                    <!-- Veins left -->
+                    <path d="M210 248 C190 234 172 218 170 193" fill="none" stroke="rgba(61,220,132,0.35)" stroke-width=".8"/>
+                    <path d="M207 230 C195 222 184 214 186 200" fill="none" stroke="rgba(61,220,132,0.25)" stroke-width=".7"/>
+
+                    <!-- Leaf right -->
+                    <path d="M210 235 C248 215 278 192 264 160 C252 131 222 153 210 188"
+                          fill="rgba(61,220,132,0.15)" stroke="rgba(61,220,132,0.55)" stroke-width="1.5"/>
+                    <!-- Veins right -->
+                    <path d="M210 235 C232 220 250 205 250 180" fill="none" stroke="rgba(61,220,132,0.3)" stroke-width=".8"/>
+
+                    <!-- Small shoot left -->
+                    <path d="M207 205 C190 195 178 182 183 168 C188 156 205 165 210 185"
+                          fill="rgba(61,220,132,0.12)" stroke="rgba(61,220,132,0.45)" stroke-width="1.2"/>
+
+                    <!-- Top leaf / apex -->
+                    <path d="M210 180 C197 162 193 140 207 124 C214 115 224 130 221 150 C219 163 215 174 210 180"
+                          fill="rgba(61,220,132,0.28)" stroke="rgba(61,220,132,0.8)" stroke-width="1.5"/>
+                    <!-- Apex vein -->
+                    <path d="M210 180 L212 148" fill="none" stroke="rgba(61,220,132,0.5)" stroke-width=".9"/>
+
+                    <!-- Root tendrils -->
+                    <path d="M210 298 C200 314 186 325 176 340" stroke="rgba(0,194,168,0.5)" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+                    <path d="M210 298 C218 316 230 326 242 342" stroke="rgba(0,194,168,0.5)" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+                    <path d="M210 300 C206 318 206 330 210 348" stroke="rgba(0,194,168,0.35)" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+                    <path d="M210 304 C201 316 192 319 184 328" stroke="rgba(0,194,168,0.25)" stroke-width="1" stroke-linecap="round" fill="none"/>
+                    <path d="M210 304 C219 316 228 320 238 330" stroke="rgba(0,194,168,0.25)" stroke-width="1" stroke-linecap="round" fill="none"/>
+                    <!-- Root node dots -->
+                    <circle cx="176" cy="340" r="3" fill="rgba(0,194,168,0.7)"/>
+                    <circle cx="242" cy="342" r="3" fill="rgba(0,194,168,0.7)"/>
+                    <circle cx="210" cy="348" r="3" fill="rgba(0,194,168,0.6)"/>
+
+                    <!-- Central hub -->
+                    <circle cx="210" cy="210" r="32" fill="rgba(0,194,168,0.05)" stroke="rgba(0,194,168,0.25)" stroke-width="1"/>
+                    <circle cx="210" cy="210" r="8"  fill="rgba(0,194,168,0.8)"/>
+                    <circle cx="210" cy="210" r="3.5" fill="white"/>
+
+                    <!-- Outer data-nodes -->
+                    <g>
+                        <circle cx="210" cy="88" r="5.5" fill="rgba(61,220,132,0.85)"/>
+                        <circle cx="322" cy="148" r="4.5" fill="rgba(0,194,168,0.8)"/>
+                        <circle cx="322" cy="272" r="4.5" fill="rgba(0,194,168,0.75)"/>
+                        <circle cx="98"  cy="148" r="4.5" fill="rgba(61,220,132,0.7)"/>
+                        <circle cx="98"  cy="272" r="4.5" fill="rgba(61,220,132,0.65)"/>
+                    </g>
+                    <!-- Mini circuit ticks on data nodes -->
+                    <g stroke="rgba(0,194,168,0.4)" stroke-width="1" stroke-linecap="round">
+                        <line x1="210" y1="78" x2="210" y2="84"/>
+                        <line x1="332" y1="148" x2="338" y2="148"/>
+                        <line x1="88"  y1="148" x2="82"  y2="148"/>
+                    </g>
+
+                    <!-- Animated scan line -->
+                    <line x1="58" y1="210" x2="362" y2="210" stroke="rgba(0,194,168,0.08)" stroke-width="1.5">
+                        <animate attributeName="y1" values="58;362;58" dur="5s" repeatCount="indefinite"/>
+                        <animate attributeName="y2" values="58;362;58" dur="5s" repeatCount="indefinite"/>
+                        <animate attributeName="stroke-opacity" values="0.06;0.35;0.06" dur="5s" repeatCount="indefinite"/>
+                    </line>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="scroll-hint" aria-hidden="true">
+        <span>Scroll</span>
+        <svg width="16" height="26" viewBox="0 0 16 26" fill="none">
+            <rect x="1" y="1" width="14" height="24" rx="7"
+                  stroke="rgba(0,194,168,0.7)" stroke-width="1.5"/>
+            <circle cx="8" cy="8" r="2.5" fill="rgba(0,194,168,0.9)">
+                <animate attributeName="cy" values="8;16;8" dur="2.2s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="1;0.2;1" dur="2.2s" repeatCount="indefinite"/>
+            </circle>
+        </svg>
+    </div>
+</section>
+
+<!-- ==============================
+     Features
+============================== -->
+<section id="features">
+    <div class="sec-head fade-up">
+        <div class="sec-label">Why HydroNova</div>
+        <h2 class="sec-title">Engineered for <em>Precision</em></h2>
+        <p class="sec-sub">Every system lives at the intersection of biology and technology — built to maximize yields while minimising impact.</p>
+    </div>
+
+    <div class="features-grid stagger">
+        <!-- Card 1 -->
+        <div class="f-card">
+            <div class="f-icon">
+                <svg viewBox="0 0 26 26" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round">
+                    <circle cx="13" cy="13" r="4.5"/>
+                    <path d="M13 3v3M13 20v3M3 13h3M20 13h3"/>
+                    <path d="M6.5 6.5l2.1 2.1M17.4 17.4l2.1 2.1M6.5 19.5l2.1-2.1M17.4 8.6l2.1-2.1"/>
+                    <circle cx="13" cy="13" r="9" stroke-opacity=".2" stroke-dasharray="3 3"/>
+                </svg>
+            </div>
+            <h3>AI-Monitored Nutrients</h3>
+            <p>Real-time EC and pH sensors feed data into our adaptive neural network. Nutrients self-balance every 30 seconds — no manual dosing, ever.</p>
+            <span class="f-chip" style="color:var(--teal)">→ Machine Learning</span>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="f-card">
+            <div class="f-icon">
+                <svg viewBox="0 0 26 26" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M13 23C13 23 3 17 3 9a10 10 0 0 1 20 0c0 8-10 14-10 14z"/>
+                    <path d="M13 9v6M10 12h6" stroke-opacity=".6"/>
+                    <path d="M13 9 C13 9 7.5 6 8.5 3" stroke-opacity=".4" stroke-dasharray="2 2" fill="none"/>
+                </svg>
+            </div>
+            <h3>Zero Soil. Zero Waste.</h3>
+            <p>Our closed-loop recirculation system reuses up to 98% of water. No runoff, no land depletion, no chemical contamination of soil.</p>
+            <span class="f-chip" style="color:var(--green)">→ Circular Systems</span>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="f-card">
+            <div class="f-icon">
+                <svg viewBox="0 0 26 26" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round">
+                    <rect x="2" y="15" width="5" height="9" rx="1"/>
+                    <rect x="10" y="9" width="5" height="15" rx="1"/>
+                    <rect x="18" y="3" width="5" height="21" rx="1"/>
+                    <path d="M4.5 12l6-5.5 5.5 2.8" stroke-opacity=".5"/>
+                </svg>
+            </div>
+            <h3>Scalable: Home to Commercial</h3>
+            <p>Start with a countertop unit. Scale to a warehouse-grade vertical farm. Same platform, same intelligence — just a bigger footprint.</p>
+            <span class="f-chip" style="color:var(--teal)">→ Modular Architecture</span>
+        </div>
+    </div>
+</section>
+
+<!-- ==============================
+     How It Works
+============================== -->
+<section id="how">
+    <div class="sec-head fade-up">
+        <div class="sec-label">The Process</div>
+        <h2 class="sec-title">Setup to <em>Harvest</em></h2>
+        <p class="sec-sub">Three steps. Infinite possibilities. Fresh produce every single day.</p>
+    </div>
+
+    <div class="steps-wrap">
+        <!-- Step 1 -->
+        <div class="step">
+            <div class="step-num">Step 01</div>
+            <div class="step-icon">
+                <svg viewBox="0 0 40 40" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round">
+                    <rect x="6" y="6" width="28" height="28" rx="4"/>
+                    <path d="M13 20h14M20 13v14"/>
+                    <circle cx="20" cy="20" r="4" stroke-opacity=".35"/>
+                </svg>
+            </div>
+            <h3>Set Up</h3>
+            <p>Plug in your HydroNova module. The app guides seeding, light calibration, and first-cycle nutrient loading in under 20 minutes.</p>
+        </div>
+
+        <div class="step-arrow">
+            <svg viewBox="0 0 56 20" fill="none">
+                <path d="M0 10H46M38 4l10 6-10 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step">
+            <div class="step-num">Step 02</div>
+            <div class="step-icon">
+                <svg viewBox="0 0 40 40" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round">
+                    <circle cx="20" cy="20" r="12"/>
+                    <path d="M20 8v12l6 6"/>
+                    <circle cx="20" cy="20" r="2" fill="var(--teal)" stroke="none"/>
+                    <path d="M32 8l2-3.5M35.5 15l3.5-1.5" stroke-opacity=".4"/>
+                </svg>
+            </div>
+            <h3>Monitor</h3>
+            <p>AI tracks nutrients, root health, light cycles, and temperature 24/7. Get growth forecasts and live alerts on your dashboard.</p>
+        </div>
+
+        <div class="step-arrow">
+            <svg viewBox="0 0 56 20" fill="none">
+                <path d="M0 10H46M38 4l10 6-10 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step">
+            <div class="step-num">Step 03</div>
+            <div class="step-icon">
+                <svg viewBox="0 0 40 40" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M20 33C14 29 8 23 8 16a12 12 0 0 1 24 0c0 7-6 13-12 17z"/>
+                    <path d="M20 22v9"/>
+                    <path d="M15 18c0-3.5 2.5-6 5-6s5 2.5 5 6" stroke-opacity=".5"/>
+                    <path d="M12 31h16" stroke-opacity=".3"/>
+                </svg>
+            </div>
+            <h3>Harvest</h3>
+            <p>Harvest up to 3× faster than soil-grown crops. Our systems cycle continuously — delivering fresh produce all year round, non-stop.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ==============================
+     Stats
+============================== -->
+<section id="stats">
+    <div class="stats-grid stagger">
+        <div class="stat">
+            <span class="stat-val" data-target="90" data-suffix="%">0%</span>
+            <span class="stat-lbl">Less water than traditional farming</span>
+        </div>
+        <div class="stat">
+            <span class="stat-val" data-target="365" data-suffix="">0</span>
+            <span class="stat-lbl">Days of growth — every year, non-stop</span>
+        </div>
+        <div class="stat">
+            <span class="stat-val" data-target="3" data-suffix="×">0×</span>
+            <span class="stat-lbl">Faster growth vs. soil cultivation</span>
+        </div>
+        <div class="stat">
+            <span class="stat-val" data-target="98" data-suffix="%">0%</span>
+            <span class="stat-lbl">Nutrient water recirculated in the loop</span>
+        </div>
+    </div>
+</section>
+
+<!-- ==============================
+     CTA
+============================== -->
+<section id="cta">
+    <div class="cta-box fade-up">
+        <div class="sec-label">Join the Movement</div>
+        <h2>Ready to grow<br>the <em>future</em>?</h2>
+        <p>Get early access to our next-gen systems, beta invites, and grow guides delivered straight to your inbox.</p>
+
+        <form class="email-wrap" id="ctaForm">
+            <input type="email" class="email-input" placeholder="your@email.com" required aria-label="Email address"/>
+            <button type="submit" class="email-btn" id="ctaBtn">Get Early Access</button>
+        </form>
+        <p class="cta-note">No spam. No soil. Just results.</p>
+    </div>
+</section>
+
+<!-- ==============================
+     Footer
+============================== -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="#" class="footer-brand-name">HYDRO<em>NOVA</em></a>
+            <p>Precision hydroponic systems at the intersection of AI, biology, and sustainable engineering.</p>
+            <div class="socials">
+                <a href="#" class="soc" aria-label="Twitter / X">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+                </a>
+                <a href="#" class="soc" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="#" class="soc" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+                </a>
+                <a href="#" class="soc" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>Product</h4>
+            <ul>
+                <li><a href="#">Home Systems</a></li>
+                <li><a href="#">Commercial Units</a></li>
+                <li><a href="#">AI Dashboard</a></li>
+                <li><a href="#">Accessories</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Research</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Resources</h4>
+            <ul>
+                <li><a href="#">Grow Guides</a></li>
+                <li><a href="#">API Docs</a></li>
+                <li><a href="#">Community</a></li>
+                <li><a href="#">Support</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 HydroNova Systems, Inc. All rights reserved.</p>
+        <div class="footer-legal">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+    </div>
+</footer>
+
+<!-- ==============================
+     JavaScript
+============================== -->
+<script>
+'use strict';
+
+/* =========================================
+   1. Particle System
+========================================= */
+const canvas = document.getElementById('particles-canvas');
+const ctx    = canvas.getContext('2d');
+let   W, H, particles = [], raf;
+
+function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+}
+
+class Particle {
+    constructor() { this.reset(true); }
+
+    reset(init = false) {
+        this.x  = Math.random() * W;
+        this.y  = init ? Math.random() * H : H + 6;
+        this.r  = Math.random() * 1.8 + 0.4;
+        this.vx = (Math.random() - 0.5) * 0.35;
+        this.vy = -(Math.random() * 0.4 + 0.1);
+        this.a  = Math.random() * 0.45 + 0.08;
+        this.da = (Math.random() - 0.5) * 0.004;
+        this.c  = Math.random() > 0.55 ? '0,194,168' : '61,220,132';
+    }
+
+    tick() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.a += this.da;
+        if (this.a < 0.05) this.da =  Math.abs(this.da);
+        if (this.a > 0.55) this.da = -Math.abs(this.da);
+        if (this.y < -8 || this.x < -8 || this.x > W + 8) this.reset();
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.c},${this.a})`;
+        ctx.fill();
+    }
+}
+
+function buildParticles() {
+    particles = [];
+    const n = Math.min(Math.floor(W * H / 14000), 90);
+    for (let i = 0; i < n; i++) particles.push(new Particle());
+}
+
+function drawEdges() {
+    const len = particles.length;
+    for (let i = 0; i < len; i++) {
+        for (let j = i + 1; j < len; j++) {
+            const dx   = particles[i].x - particles[j].x;
+            const dy   = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 95) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(0,194,168,${0.055 * (1 - dist / 95)})`;
+                ctx.lineWidth   = 0.5;
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+function loop() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.tick(); p.draw(); });
+    drawEdges();
+    raf = requestAnimationFrame(loop);
+}
+
+window.addEventListener('resize', () => { resize(); buildParticles(); });
+resize();
+buildParticles();
+loop();
+
+/* =========================================
+   2. Floating ambient orbs in Hero
+========================================= */
+(function addOrbs() {
+    const hero = document.getElementById('hero');
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes floatOrb {
+            0%,100%{ transform:translate(0,0) scale(1);     opacity:.55; }
+            30%    { transform:translate(25px,-18px) scale(1.08); opacity:.75; }
+            60%    { transform:translate(-18px,25px) scale(.94); opacity:.45; }
+            80%    { transform:translate(18px,18px) scale(1.04); opacity:.65; }
+        }
+    `;
+    document.head.appendChild(style);
+
+    const colors = ['rgba(0,194,168,0.1)', 'rgba(61,220,132,0.08)', 'rgba(0,194,168,0.07)'];
+    for (let i = 0; i < 5; i++) {
+        const orb    = document.createElement('div');
+        const sz     = 140 + Math.random() * 220;
+        const dur    = 9  + Math.random() * 9;
+        const delay  = Math.random() * 5;
+        const color  = colors[i % colors.length];
+        orb.style.cssText = `
+            position:absolute;pointer-events:none;border-radius:50%;
+            width:${sz}px;height:${sz}px;
+            left:${Math.random() * 85}%;top:${Math.random() * 85}%;
+            background:radial-gradient(circle,${color} 0%,transparent 70%);
+            animation:floatOrb ${dur}s ease-in-out infinite ${delay}s;
+            z-index:0;
+        `;
+        hero.appendChild(orb);
+    }
+}());
+
+/* =========================================
+   3. Scroll Animations (IntersectionObserver)
+========================================= */
+const io = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }),
+    { threshold: 0.14, rootMargin: '0px 0px -55px 0px' }
+);
+
+document.querySelectorAll('.fade-up, .stagger, .step').forEach(el => io.observe(el));
+
+/* =========================================
+   4. Counter Animation
+========================================= */
+const cio = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting && !e.target.dataset.done) {
+            e.target.dataset.done = '1';
+            countUp(e.target);
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-val[data-target]').forEach(el => cio.observe(el));
+
+function countUp(el) {
+    const target = +el.dataset.target;
+    const suffix = el.dataset.suffix || '';
+    const dur    = 1800;
+    const t0     = performance.now();
+    function frame(now) {
+        const p = Math.min((now - t0) / dur, 1);
+        const v = Math.floor((1 - Math.pow(1 - p, 3)) * target);
+        el.textContent = v + suffix;
+        if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+}
+
+/* =========================================
+   5. Navbar scroll effect
+========================================= */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 48);
+}, { passive: true });
+
+/* =========================================
+   6. CTA Form
+========================================= */
+document.getElementById('ctaForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn   = document.getElementById('ctaBtn');
+    const input = this.querySelector('.email-input');
+    btn.textContent   = "You're In!";
+    btn.style.background = 'linear-gradient(135deg,var(--green),var(--green-dark))';
+    input.value = '';
+    setTimeout(() => {
+        btn.textContent  = 'Get Early Access';
+        btn.style.background = '';
+    }, 3200);
+});
+</script>
+</body>
+</html>
