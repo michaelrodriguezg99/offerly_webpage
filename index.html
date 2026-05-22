@@ -3,199 +3,1002 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Offerly. — Build, Package, and Sell Your Expertise</title>
-  <meta name="description" content="Offerly partners with creators to design, build, and launch monetization systems — on a pure revenue share model. No upfront cost.">
+  <title>Offerly — Monetization Infrastructure for Creators</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+  <style>
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       DESIGN TOKENS
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    :root {
+      --bg:          #0d1b2a;
+      --bg-2:        #112236;
+      --cream:       #f5f0e8;
+      --cream-muted: #b8b0a0;
+      --gold:        #c9a84c;
+      --white:       #ffffff;
+      --ease:        cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       RESET & BASE
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: #060e18;
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, blockquote { font-family: 'DM Serif Display', serif; font-weight: 400; }
+
+    a { text-decoration: none; }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       NAV
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.35rem 5vw;
+      transition: background 0.45s var(--ease), backdrop-filter 0.45s var(--ease);
+    }
+
+    nav.scrolled {
+      background: rgba(13, 27, 42, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .nav-wordmark {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.65rem;
+      color: var(--cream);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-pill {
+      display: inline-block;
+      padding: 0.5rem 1.4rem;
+      border: 1.5px solid var(--gold);
+      border-radius: 100px;
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: background 0.3s var(--ease), color 0.3s var(--ease),
+                  transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+
+    .nav-pill:hover {
+      background: var(--gold);
+      color: var(--bg);
+      transform: scale(1.04);
+      box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       SHARED UTILITIES
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    .container { max-width: 1080px; margin: 0 auto; }
+
+    section { padding: 7.5rem 5vw; }
+
+    .btn-gold {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 1rem 2.25rem;
+      border-radius: 100px;
+      letter-spacing: 0.01em;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    }
+
+    .btn-gold:hover {
+      transform: scale(1.06);
+      box-shadow: 0 10px 38px rgba(201,168,76,0.4);
+    }
+
+    /* Clip-path heading reveal */
+    .heading-reveal { overflow: hidden; }
+
+    .heading-reveal .hr-inner {
+      display: block;
+      clip-path: inset(0 100% 0 0);
+      will-change: clip-path;
+      transition: clip-path 1s var(--ease);
+    }
+
+    .heading-reveal.is-visible .hr-inner { clip-path: inset(0 0% 0 0); }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       HERO
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 9rem 5vw 7rem;
+      overflow: hidden;
+      background: var(--bg);
+      border-radius: 24px;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.07),
+        0 24px 72px rgba(0,0,0,0.55);
+    }
+
+    .orb-field {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+    }
+
+    .orb-a {
+      width: 55vw; height: 55vw;
+      background: radial-gradient(circle at 40% 40%, #163352 0%, transparent 70%);
+      top: -15%; left: -12%;
+      opacity: 0.55;
+      animation: driftA 20s ease-in-out infinite alternate;
+    }
+
+    .orb-b {
+      width: 42vw; height: 42vw;
+      background: radial-gradient(circle at 60% 60%, #0c2818 0%, transparent 70%);
+      bottom: -12%; right: -8%;
+      opacity: 0.45;
+      animation: driftB 25s ease-in-out infinite alternate;
+    }
+
+    .orb-c {
+      width: 28vw; height: 28vw;
+      background: radial-gradient(circle at 50% 50%, rgba(201,168,76,0.18) 0%, transparent 70%);
+      top: 38%; left: 52%;
+      opacity: 0.7;
+      animation: driftC 17s ease-in-out infinite alternate;
+    }
+
+    @keyframes driftA {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(7vw, 8vh) scale(1.14); }
+    }
+    @keyframes driftB {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(-6vw, -9vh) scale(1.1); }
+    }
+    @keyframes driftC {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(-5vw, 7vh) scale(1.22); }
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+    }
+
+    .hero-eyebrow {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: riseIn 0.9s var(--ease) 0.35s both;
+    }
+
+    .hero-h1 {
+      font-size: clamp(2.6rem, 6.5vw, 5rem);
+      color: var(--cream);
+      line-height: 1.1;
+      margin-bottom: 1.8rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-h1 .w {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(32px);
+      will-change: opacity, transform;
+      margin-right: 0.22em;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      color: var(--cream-muted);
+      max-width: 520px;
+      margin: 0 auto 2.75rem;
+      line-height: 1.75;
+      opacity: 0;
+      animation: riseIn 0.9s var(--ease) 1.4s both;
+    }
+
+    .hero-cta {
+      opacity: 0;
+      animation: riseIn 0.9s var(--ease) 1.7s both;
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PROBLEM
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #problem { background: var(--bg-2); }
+
+    #problem .sec-head {
+      font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+      color: var(--cream);
+      text-align: center;
+      margin-bottom: 4rem;
+      line-height: 1.2;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 20px;
+      padding: 2.5rem 2rem 2.25rem;
+      opacity: 0;
+      transform: translateY(44px);
+      will-change: opacity, transform;
+      transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+    }
+
+    .card.is-visible { opacity: 1; transform: translateY(0); }
+    .card:nth-child(2) { transition-delay: 0.14s; }
+    .card:nth-child(3) { transition-delay: 0.28s; }
+
+    .card-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .card h3 {
+      font-size: 1.35rem;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--cream-muted);
+      line-height: 1.7;
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       HOW IT WORKS
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #how { background: var(--bg); }
+
+    #how .sec-head {
+      font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+      color: var(--cream);
+      text-align: center;
+      margin-bottom: 5.5rem;
+    }
+
+    .steps { display: flex; flex-direction: column; gap: 5rem; }
+
+    .step {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+      opacity: 0;
+      will-change: opacity, transform;
+      transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+    }
+
+    .step.from-left  { transform: translateX(-64px); }
+    .step.from-right { transform: translateX(64px); }
+    .step.is-visible { opacity: 1; transform: translateX(0); }
+
+    .step:nth-child(even) .step-num-col  { order: 2; }
+    .step:nth-child(even) .step-text-col { order: 1; }
+
+    .step-num {
+      font-size: clamp(5rem, 10vw, 8.5rem);
+      color: var(--gold);
+      opacity: 0.55;
+      line-height: 1;
+      text-align: center;
+      letter-spacing: -0.03em;
+    }
+
+    .step-title {
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+
+    .step-body {
+      font-size: 1rem;
+      color: var(--cream-muted);
+      line-height: 1.75;
+    }
+
+    /* ScrollFadeText words */
+    .sft-word {
+      display: inline;
+      opacity: 0.08;
+      transition: opacity 0.1s ease;
+      will-change: opacity;
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       REVENUE — SCROLL CARD STACK
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #revenue {
+      padding: 0;
+      position: relative;
+      background: var(--bg);
+    }
+
+    .revenue-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .rev-stack {
+      position: relative;
+      width: min(580px, 88vw);
+      height: min(360px, 58vh);
+    }
+
+    .rev-card {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(150deg, var(--bg-2) 0%, #0c1b2b 100%);
+      border: 1px solid rgba(201,168,76,0.18);
+      border-radius: 24px;
+      padding: clamp(2rem, 4vw, 3rem);
+      display: flex;
+      flex-direction: column;
+      will-change: transform, opacity;
+      overflow: hidden;
+    }
+
+    .rev-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 2rem; right: 2rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.45), transparent);
+    }
+
+    .rev-card-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+
+    .rev-card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.7rem, 3.8vw, 2.5rem);
+      color: var(--cream);
+      line-height: 1.12;
+      margin-bottom: 1.1rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    .rev-card-body {
+      font-size: 0.97rem;
+      color: var(--cream-muted);
+      line-height: 1.75;
+      flex: 1;
+    }
+
+    /* Progress dots */
+    .rev-dots {
+      display: flex;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .rev-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.25);
+      transition: background 0.35s ease, transform 0.35s ease;
+    }
+
+    .rev-dot.active {
+      background: var(--gold);
+      transform: scale(1.5);
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       WHY IT WORKS — PARALLAX PULL QUOTE
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #why {
+      background: var(--bg);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 9rem 5vw;
+    }
+
+    .why-bg {
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(201,168,76,0.07) 0%, transparent 65%);
+      will-change: transform;
+      pointer-events: none;
+    }
+
+    blockquote.pull-quote {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(1.6rem, 3.8vw, 3rem);
+      color: var(--cream);
+      line-height: 1.35;
+      max-width: 820px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(32px);
+      will-change: opacity, transform;
+      transition: opacity 1s var(--ease), transform 1s var(--ease);
+    }
+
+    blockquote.pull-quote.is-visible { opacity: 1; transform: translateY(0); }
+
+    blockquote.pull-quote em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       APPLY CTA
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    #apply {
+      background: var(--bg-2);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 5vw;
+    }
+
+    .apply-inner {
+      max-width: 680px;
+      opacity: 0;
+      transform: translateY(40px);
+      will-change: opacity, transform;
+      transition: opacity 0.95s var(--ease), transform 0.95s var(--ease);
+    }
+
+    .apply-inner.is-visible { opacity: 1; transform: translateY(0); }
+
+    .apply-inner h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--cream);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.35rem;
+    }
+
+    .apply-inner p {
+      font-size: clamp(0.95rem, 1.7vw, 1.1rem);
+      color: var(--cream-muted);
+      margin-bottom: 2.75rem;
+      line-height: 1.75;
+    }
+
+    .apply-note {
+      display: block;
+      margin-top: 1.3rem;
+      font-size: 0.82rem;
+      color: var(--cream-muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       FOOTER
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    footer {
+      background: var(--bg);
+      padding: 2.5rem 5vw;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      color: var(--cream-muted);
+      letter-spacing: 0.03em;
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       MOBILE
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    @media (max-width: 768px) {
+      section { padding: 5.5rem 6vw; }
+
+      .cards { grid-template-columns: 1fr; gap: 1.2rem; }
+
+      .steps { gap: 3.5rem; }
+
+      .step {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+      }
+
+      .step:nth-child(even) .step-num-col  { order: 0; }
+      .step:nth-child(even) .step-text-col { order: 0; }
+
+      .step-num { text-align: left; font-size: 5rem; }
+
+      /* Revenue stack — smaller card on mobile */
+      .rev-stack { height: min(400px, 62vh); }
+
+      #how .sec-head { margin-bottom: 3.5rem; }
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       REDUCED MOTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    @media (prefers-reduced-motion: reduce) {
+      .orb-a, .orb-b, .orb-c { animation: none; }
+
+      .hero-eyebrow,
+      .hero-sub,
+      .hero-cta,
+      .hero-h1 .w {
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
+
+      .heading-reveal .hr-inner { clip-path: none; transition: none; }
+
+      .card,
+      .step,
+      blockquote.pull-quote,
+      .apply-inner {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      /* Revenue stack — static fallback */
+      #revenue { height: auto !important; padding: 5.5rem 6vw; }
+      .revenue-sticky { position: static; height: auto; gap: 2rem; }
+      .rev-stack { position: static; height: auto; display: flex; flex-direction: column; gap: 1.25rem; }
+      .rev-card  { position: static; opacity: 1 !important; transform: none !important; }
+      .rev-dots  { display: none; }
+
+      .sft-word { opacity: 1 !important; transition: none; }
+
+      #hero { border-radius: 0; box-shadow: none; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ========== NAVBAR ========== -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">Offerly.</a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="how-it-works.html">How It Works</a></li>
-        <li><a href="case-studies.html">Case Studies</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-      <a href="contact.html" class="btn btn-filled nav-cta">Book a Call</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+  <!-- NAV -->
+  <nav id="site-nav" role="navigation" aria-label="Main navigation">
+    <span class="nav-wordmark">Offerly.</span>
+    <a href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/michael-rodriguez-theofferly/15-minute-meeting'});return false;" class="nav-pill">Apply Now</a>
   </nav>
 
-  <!-- ========== HERO ========== -->
-  <section class="hero-home">
-    <!-- Cinematic background canvas -->
-    <canvas id="heroCanvas" class="hero-canvas" aria-hidden="true"></canvas>
-
-    <div class="hero-home-inner">
-      <h1 class="hero-headline">
-        <span class="hero-line">You have the audience.</span>
-        <span class="hero-line">We build the revenue.</span>
+  <!-- HERO -->
+  <section id="hero" aria-label="Hero">
+    <div class="orb-field" aria-hidden="true">
+      <div class="orb orb-a"></div>
+      <div class="orb orb-b"></div>
+      <div class="orb orb-c"></div>
+    </div>
+    <div class="hero-inner">
+      <span class="hero-eyebrow">Monetization Infrastructure for Creators</span>
+      <h1 class="hero-h1" id="hero-h1" aria-label="Build, package, and sell your expertise.">
+        Build, package, and sell your expertise.
       </h1>
-      <p class="hero-sub">Offerly partners with creators to design, build, and launch monetization systems — on a pure revenue share model. No upfront cost.</p>
-      <div class="hero-ctas">
-        <a href="contact.html" class="btn btn-filled">Book a Call</a>
-        <a href="how-it-works.html" class="btn btn-ghost">See How It Works</a>
-      </div>
-    </div>
-    <div class="hero-deco" aria-hidden="true">O</div>
-  </section>
-
-  <!-- ========== MARQUEE ========== -->
-  <div class="marquee-strip" aria-hidden="true">
-    <div class="marquee-track">
-      <span class="marquee-item">Audience Audit &nbsp;&nbsp;·&nbsp;&nbsp; Offer Design &nbsp;&nbsp;·&nbsp;&nbsp; Sales System &nbsp;&nbsp;·&nbsp;&nbsp; Revenue Share &nbsp;&nbsp;·&nbsp;&nbsp; Launch Strategy &nbsp;&nbsp;·&nbsp;&nbsp; Digital Products &nbsp;&nbsp;·&nbsp;&nbsp; Creator Monetization &nbsp;&nbsp;·&nbsp;&nbsp;</span>
-      <span class="marquee-item">Audience Audit &nbsp;&nbsp;·&nbsp;&nbsp; Offer Design &nbsp;&nbsp;·&nbsp;&nbsp; Sales System &nbsp;&nbsp;·&nbsp;&nbsp; Revenue Share &nbsp;&nbsp;·&nbsp;&nbsp; Launch Strategy &nbsp;&nbsp;·&nbsp;&nbsp; Digital Products &nbsp;&nbsp;·&nbsp;&nbsp; Creator Monetization &nbsp;&nbsp;·&nbsp;&nbsp;</span>
-      <span class="marquee-item">Audience Audit &nbsp;&nbsp;·&nbsp;&nbsp; Offer Design &nbsp;&nbsp;·&nbsp;&nbsp; Sales System &nbsp;&nbsp;·&nbsp;&nbsp; Revenue Share &nbsp;&nbsp;·&nbsp;&nbsp; Launch Strategy &nbsp;&nbsp;·&nbsp;&nbsp; Digital Products &nbsp;&nbsp;·&nbsp;&nbsp; Creator Monetization &nbsp;&nbsp;·&nbsp;&nbsp;</span>
-    </div>
-  </div>
-
-  <!-- ========== PROBLEM SECTION ========== -->
-  <section class="section bg-alt">
-    <div class="container text-center">
-      <span class="section-label">THE PROBLEM</span>
-      <h2 class="section-heading centered anim-heading">Most creators are earning a fraction of what their audience is worth.</h2>
-      <div class="cards-grid cards-3">
-        <div class="card anim-card">
-          <h3 class="card-title">No Product</h3>
-          <p class="card-body">You create content daily but have nothing to sell.</p>
-        </div>
-        <div class="card anim-card">
-          <h3 class="card-title">No System</h3>
-          <p class="card-body">No sales page, no funnel, no repeatable revenue flow.</p>
-        </div>
-        <div class="card anim-card">
-          <h3 class="card-title">No Time</h3>
-          <p class="card-body">Building all of this alone would take months you don't have.</p>
-        </div>
+      <p class="hero-sub">
+        Most creators have attention. I build the system that turns it into revenue.
+      </p>
+      <div class="hero-cta">
+        <a href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/michael-rodriguez-theofferly/15-minute-meeting'});return false;" class="btn-gold">Apply to Work With Me</a>
       </div>
     </div>
   </section>
 
-  <!-- ========== HOW IT WORKS PREVIEW ========== -->
-  <section class="section bg-white">
+  <!-- PROBLEM -->
+  <section id="problem" aria-labelledby="problem-heading">
     <div class="container">
-      <span class="section-label">THE PROCESS</span>
-      <h2 class="section-heading anim-heading">From audience to income —<br>in four steps.</h2>
-      <div class="steps-preview-grid">
-        <div class="step-preview-item anim-card">
-          <span class="step-preview-num">01</span>
-          <div class="step-preview-body">
-            <h3 class="step-preview-label">Audience Audit</h3>
-            <p>We analyze your positioning to find where real monetization opportunity lives.</p>
-          </div>
-        </div>
-        <div class="step-preview-item anim-card">
-          <span class="step-preview-num">02</span>
-          <div class="step-preview-body">
-            <h3 class="step-preview-label">Build the Offer</h3>
-            <p>We design the right product for your audience — built to convert.</p>
-          </div>
-        </div>
-        <div class="step-preview-item anim-card">
-          <span class="step-preview-num">03</span>
-          <div class="step-preview-body">
-            <h3 class="step-preview-label">Launch System</h3>
-            <p>We write the copy, build the sales page, and set up the full conversion flow.</p>
-          </div>
-        </div>
-        <div class="step-preview-item anim-card">
-          <span class="step-preview-num">04</span>
-          <div class="step-preview-body">
-            <h3 class="step-preview-label">Launch &amp; Optimize</h3>
-            <p>We go live, monitor performance, and refine until it's repeatable and scalable.</p>
-          </div>
-        </div>
-      </div>
-      <div class="mt-xl">
-        <a href="how-it-works.html" class="text-link">See Full Process →</a>
+      <h2 id="problem-heading" class="sec-head heading-reveal">
+        <span class="hr-inner">You have the audience. The business side is missing.</span>
+      </h2>
+      <div class="cards" role="list">
+        <article class="card" role="listitem">
+          <div class="card-dot" aria-hidden="true"></div>
+          <h3>Views ≠ Revenue</h3>
+          <p>Viral moments and massive reach mean nothing without a system that captures attention and converts it into real, recurring income.</p>
+        </article>
+        <article class="card" role="listitem">
+          <div class="card-dot" aria-hidden="true"></div>
+          <h3>Attention Without Systems</h3>
+          <p>An engaged audience is a starting point, not an outcome. Without the right infrastructure, attention stays attention — and time runs out.</p>
+        </article>
+        <article class="card" role="listitem">
+          <div class="card-dot" aria-hidden="true"></div>
+          <h3>Complexity Kills Growth</h3>
+          <p>Offers, funnels, checkout pages, email flows — the operational weight stops most creators before their first dollar from a product.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- ========== VALUE PROPS ========== -->
-  <section class="section bg-alt">
+  <!-- HOW IT WORKS -->
+  <section id="how" aria-labelledby="how-heading">
     <div class="container">
-      <div class="cards-grid cards-3">
-        <div class="card card-value anim-card">
-          <span class="card-icon">◆</span>
-          <h3 class="card-title">No Upfront Cost</h3>
-          <p class="card-body">Revenue share only. We only win when you win.</p>
+      <h2 id="how-heading" class="sec-head heading-reveal">
+        <span class="hr-inner">How It Works</span>
+      </h2>
+      <div class="steps">
+
+        <div class="step from-left">
+          <div class="step-num-col" aria-hidden="true">
+            <div class="step-num">01</div>
+          </div>
+          <div class="step-text-col">
+            <h3 class="step-title">Audience Audit</h3>
+            <p class="step-body">I look at what you have, what your people respond to, and where the real opportunity is.</p>
+          </div>
         </div>
-        <div class="card card-value anim-card">
-          <span class="card-icon">◇</span>
-          <h3 class="card-title">Custom to Your Audience</h3>
-          <p class="card-body">Every offer built around your niche and community.</p>
+
+        <div class="step from-right">
+          <div class="step-num-col" aria-hidden="true">
+            <div class="step-num">02</div>
+          </div>
+          <div class="step-text-col">
+            <h3 class="step-title">Build the Offer</h3>
+            <p class="step-body">Ebook, course, digital product, or challenge — I build what fits your audience.</p>
+          </div>
         </div>
-        <div class="card card-value anim-card">
-          <span class="card-icon">○</span>
-          <h3 class="card-title">You Keep Everything</h3>
-          <p class="card-body">Brand, audience, IP. We run the engine.</p>
+
+        <div class="step from-left">
+          <div class="step-num-col" aria-hidden="true">
+            <div class="step-num">03</div>
+          </div>
+          <div class="step-text-col">
+            <h3 class="step-title">Build the Launch System</h3>
+            <p class="step-body">Messaging, sales page, conversion flow, and rollout strategy.</p>
+          </div>
         </div>
+
+        <div class="step from-right">
+          <div class="step-num-col" aria-hidden="true">
+            <div class="step-num">04</div>
+          </div>
+          <div class="step-text-col">
+            <h3 class="step-title">Launch &amp; Optimize</h3>
+            <p class="step-body">I monitor, improve, and refine until the system becomes repeatable.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- ========== WHO IT'S FOR ========== -->
-  <section class="section bg-white text-center">
+  <!-- REVENUE — SCROLL CARD STACK -->
+  <section id="revenue" aria-label="Revenue model">
+    <div class="revenue-sticky">
+      <div class="rev-stack" role="list">
+
+        <div class="rev-card" role="listitem" data-rev-card>
+          <div class="rev-card-eyebrow">The Model</div>
+          <h2 class="rev-card-title">I only win<br>when you win.</h2>
+          <p class="rev-card-body">No upfront fees. No retainers. I work on a revenue share model — I get paid from the income the system generates. Zero risk on your side.</p>
+        </div>
+
+        <div class="rev-card" role="listitem" data-rev-card>
+          <div class="rev-card-eyebrow">01</div>
+          <h3 class="rev-card-title">No Upfront Cost</h3>
+          <p class="rev-card-body">You don't pay a cent to start. No agency fees, no setup costs, no contracts to sign. I invest my time and expertise in exchange for a share of what we build together.</p>
+        </div>
+
+        <div class="rev-card" role="listitem" data-rev-card>
+          <div class="rev-card-eyebrow">02</div>
+          <h3 class="rev-card-title">Revenue Share Only</h3>
+          <p class="rev-card-body">My compensation comes entirely from the revenue the system generates. If it doesn't perform, I don't get paid. That's the only model that makes sense to me.</p>
+        </div>
+
+        <div class="rev-card" role="listitem" data-rev-card>
+          <div class="rev-card-eyebrow">03</div>
+          <h3 class="rev-card-title">Performance Aligned</h3>
+          <p class="rev-card-body">Every decision I make — what to build, how to launch, how to optimize — is driven by the same goal as yours: maximum revenue from your audience.</p>
+        </div>
+
+      </div>
+
+      <div class="rev-dots" aria-hidden="true">
+        <div class="rev-dot active"></div>
+        <div class="rev-dot"></div>
+        <div class="rev-dot"></div>
+        <div class="rev-dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY IT WORKS -->
+  <section id="why" aria-label="Our philosophy">
+    <div class="why-bg" id="why-bg" aria-hidden="true"></div>
     <div class="container">
-      <h2 class="section-heading centered anim-heading">Built for creators with audiences.</h2>
-      <p class="who-sub">If you have an engaged following on YouTube, Instagram, or TikTok — and you haven't turned it into reliable revenue — that's exactly where we start.</p>
-      <div class="platform-pills">
-        <span class="pill">YouTube</span>
-        <span class="pill">Instagram</span>
-        <span class="pill">TikTok</span>
-      </div>
-      <div class="mt-xl">
-        <a href="contact.html" class="text-link">Apply to Partner →</a>
-      </div>
+      <blockquote class="pull-quote">
+        "You keep the audience and the brand. I handle the <em>monetization engine.</em> The upside is shared."
+      </blockquote>
     </div>
   </section>
 
-  <!-- ========== CTA BANNER ========== -->
-  <section class="cta-banner">
-    <div class="container text-center">
-      <h2 class="cta-banner-heading anim-heading">Ready to monetize your audience?</h2>
-      <p class="cta-banner-sub">We only work with a small number of partners at a time.</p>
-      <a href="contact.html" class="btn btn-white">Book a Call</a>
+  <!-- APPLY CTA -->
+  <section id="apply" aria-labelledby="apply-heading">
+    <div class="apply-inner">
+      <h2 id="apply-heading">Turn your audience into predictable revenue.</h2>
+      <p>I audit your audience, build your offer, and launch the system — on a performance basis.</p>
+      <a href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/michael-rodriguez-theofferly/15-minute-meeting'});return false;" class="btn-gold">Apply to Work With Me</a>
+      <span class="apply-note">Limited spots. Revenue share model. No upfront fees.</span>
     </div>
   </section>
 
-  <!-- ========== FOOTER ========== -->
-  <footer class="footer">
-    <div class="footer-inner container">
-      <div class="footer-col">
-        <a href="index.html" class="nav-logo footer-logo">Offerly.</a>
-        <p class="footer-tagline">Build, package, and sell your expertise.</p>
-      </div>
-      <div class="footer-col footer-nav-col">
-        <ul class="footer-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="how-it-works.html">How It Works</a></li>
-          <li><a href="case-studies.html">Case Studies</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-col footer-cta-col">
-        <a href="contact.html" class="btn btn-filled">Book a Call</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2025 Offerly. All rights reserved.</p>
-    </div>
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Offerly. All rights reserved.</p>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="main.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      const EASE    = 'cubic-bezier(0.22, 1, 0.36, 1)';
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* ── Nav scroll blur ── */
+      const nav = document.getElementById('site-nav');
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+      }, { passive: true });
+
+      /* ── Hero H1 word-by-word ── */
+      if (!reduced) {
+        const h1   = document.getElementById('hero-h1');
+        const words = h1.textContent.trim().split(/\s+/);
+
+        const kf = document.createElement('style');
+        kf.textContent = '@keyframes wRise{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}';
+        document.head.appendChild(kf);
+
+        h1.innerHTML = words.map((word, i) => {
+          const delay = (0.55 + i * 0.1).toFixed(2);
+          return `<span class="w" style="animation:wRise 0.75s ${EASE} ${delay}s both">${word}</span>`;
+        }).join(' ');
+      }
+
+      /* ── IntersectionObserver scroll reveals ── */
+      function watchAll(selector, threshold) {
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll(selector).forEach(el => obs.observe(el));
+      }
+
+      watchAll('.heading-reveal', 0.2);
+      watchAll('.card',           0.15);
+      watchAll('.step',           0.15);
+      watchAll('.pull-quote',     0.25);
+      watchAll('.apply-inner',    0.2);
+
+      /* ── Scroll Card Stack — Revenue ── */
+      if (!reduced) {
+        const revSection = document.getElementById('revenue');
+        const revCards   = Array.from(document.querySelectorAll('[data-rev-card]'));
+        const revDots    = Array.from(document.querySelectorAll('.rev-dot'));
+        const N          = revCards.length;
+        const VH         = window.innerHeight;
+        const PER_CARD   = Math.round(VH * 0.7); // scroll px per card transition
+
+        // Extend section height so each card gets its own scroll zone
+        revSection.style.height = `calc(100vh + ${(N - 1) * PER_CARD}px)`;
+
+        // Set initial state: all cards off-screen except card 0
+        revCards.forEach((card, i) => {
+          card.style.transform = i === 0 ? 'translateY(0px) scale(1)' : `translateY(${VH}px) scale(1)`;
+          card.style.opacity   = i === 0 ? '1' : '0';
+          card.style.zIndex    = i + 10;
+        });
+
+        let rafRev = false;
+
+        function updateRevStack() {
+          const scrolledIn = -(revSection.getBoundingClientRect().top);
+
+          // Which card is the "topmost" active card
+          let currentIdx = 0;
+          for (let i = 0; i < N; i++) {
+            if (scrolledIn >= i * PER_CARD) currentIdx = i;
+          }
+
+          revDots.forEach((d, i) => d.classList.toggle('active', i === currentIdx));
+
+          revCards.forEach((card, i) => {
+            const raw = (scrolledIn - i * PER_CARD) / PER_CARD; // −∞..+∞
+
+            let ty, sc, op;
+
+            if (raw < 0) {
+              // Card not yet reached — parked below
+              ty = VH;
+              sc = 1;
+              op = 0;
+            } else if (raw <= 1) {
+              // Card entering — cubic ease-out slide up
+              const e = 1 - Math.pow(1 - raw, 3);
+              ty = VH * (1 - e);
+              sc = 1;
+              op = Math.min(raw * 6, 1);
+            } else {
+              // Card stacked behind newer cards
+              const depth = currentIdx - i;
+              ty = -(depth * 16);
+              sc = 1 - depth * 0.04;
+              op = Math.max(0.35, 1 - depth * 0.18);
+            }
+
+            card.style.transform = `translateY(${ty.toFixed(1)}px) scale(${sc.toFixed(4)})`;
+            card.style.opacity   = op.toFixed(3);
+            card.style.zIndex    = i + 10;
+          });
+
+          rafRev = false;
+        }
+
+        window.addEventListener('scroll', () => {
+          if (!rafRev) { rafRev = true; requestAnimationFrame(updateRevStack); }
+        }, { passive: true });
+
+        updateRevStack();
+      }
+
+      /* ── RadiusOnScroll — Hero ── */
+      if (!reduced) {
+        const hero       = document.getElementById('hero');
+        const RADIUS_MAX = 24;   // px — starting corner size
+        const SCROLL_END = 260;  // px of scroll to complete the collapse
+        let rafHero      = false;
+
+        function updateHeroRadius() {
+          const raw    = Math.min(window.scrollY / SCROLL_END, 1);
+          // ease-in-out quad
+          const t      = raw < 0.5 ? 2 * raw * raw : -1 + (4 - 2 * raw) * raw;
+          const radius = (RADIUS_MAX * (1 - t)).toFixed(2);
+          const ring   = (0.07 * (1 - t)).toFixed(4);
+          const shadow = (0.45 * (1 - t)).toFixed(4);
+
+          hero.style.borderRadius = `${radius}px`;
+          hero.style.boxShadow    =
+            `inset 0 0 0 1px rgba(255,255,255,${ring}),` +
+            `0 32px 80px rgba(0,0,0,${shadow})`;
+
+          rafHero = false;
+        }
+
+        window.addEventListener('scroll', () => {
+          if (!rafHero) { rafHero = true; requestAnimationFrame(updateHeroRadius); }
+        }, { passive: true });
+
+        updateHeroRadius();
+      }
+
+      /* ── ScrollFadeText — How It Works step bodies ── */
+      if (!reduced) {
+        document.querySelectorAll('#how .step-body').forEach(el => {
+          const words = el.textContent.trim().split(/\s+/);
+          el.innerHTML = words.map(w => `<span class="sft-word">${w}</span>`).join(' ');
+        });
+
+        const sftWords  = Array.from(document.querySelectorAll('.sft-word'));
+        const READ_LINE = 0.6;   // fraction of vh — where words "become read"
+        const FADE_SPAN = 0.32;  // fraction of vh — transition zone below read line
+        let rafPending  = false;
+
+        function updateSFT() {
+          const vh        = window.innerHeight;
+          const readPx    = vh * READ_LINE;
+          const fadePx    = vh * FADE_SPAN;
+
+          sftWords.forEach(word => {
+            const top = word.getBoundingClientRect().top;
+            let t;
+            if      (top <= readPx - fadePx) { t = 1; }       // fully above — lit
+            else if (top >= readPx)          { t = 0; }       // below line — dim
+            else                             { t = (readPx - top) / fadePx; }
+
+            word.style.opacity = (0.08 + t * 0.92).toFixed(3);
+          });
+
+          rafPending = false;
+        }
+
+        window.addEventListener('scroll', () => {
+          if (!rafPending) { rafPending = true; requestAnimationFrame(updateSFT); }
+        }, { passive: true });
+
+        updateSFT();
+      }
+
+      /* ── Parallax — Why section ── */
+      if (!reduced) {
+        const whySection = document.getElementById('why');
+        const whyBg      = document.getElementById('why-bg');
+
+        window.addEventListener('scroll', () => {
+          const rect     = whySection.getBoundingClientRect();
+          const progress = 1 - (rect.top + rect.height) / (window.innerHeight + rect.height);
+          whyBg.style.transform = `translateY(${((progress - 0.5) * 70).toFixed(1)}px)`;
+        }, { passive: true });
+      }
+
+    })();
+  </script>
 </body>
 </html>
